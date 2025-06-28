@@ -49,6 +49,24 @@ function createMigrationProxy(
   };
 }
 
+// /api/health → проксируется в монолит
+app.use(
+  "/api/health",
+  createProxyMiddleware({
+    target: MONOLITH_URL,
+    changeOrigin: true,
+  })
+);
+
+//health → локальный health-check самого proxy
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "proxy-service",
+    timestamp: new Date().toISOString(),
+  });
+});
+
 app.use("/api/movies", createMigrationProxy(MONOLITH_URL, MOVIES_SERVICE_URL));
 app.use("/api/movies/health", createMigrationProxy(MOVIES_SERVICE_URL));
 
@@ -56,17 +74,12 @@ app.use("/api/movies/health", createMigrationProxy(MOVIES_SERVICE_URL));
 app.use("/api/users", createMigrationProxy(MONOLITH_URL));
 app.use("/api/payments", createMigrationProxy(MONOLITH_URL));
 app.use("/api/subscriptions", createMigrationProxy(MONOLITH_URL));
-app.use("/api/health", createMigrationProxy(MONOLITH_URL));
 
-// Прокси для /api/events
 app.use(
   "/api/events",
   createProxyMiddleware({
     target: EVENTS_SERVICE_URL,
     changeOrigin: true,
-    pathRewrite: {
-      "^/api/events": "",
-    },
   })
 );
 
