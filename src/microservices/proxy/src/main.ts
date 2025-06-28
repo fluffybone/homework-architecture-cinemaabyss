@@ -4,7 +4,6 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// URL сервисов из переменных окружения
 const MONOLITH_URL = process.env.MONOLITH_URL!;
 const MOVIES_SERVICE_URL = process.env.MOVIES_SERVICE_URL!;
 const EVENTS_SERVICE_URL = process.env.EVENTS_SERVICE_URL!;
@@ -13,7 +12,6 @@ const MOVIES_MIGRATION_PERCENT = parseInt(
   process.env.MOVIES_MIGRATION_PERCENT || "0"
 );
 
-// Вспомогательная функция: случайный выбор между сервисами
 function getRandomService(
   primary: string,
   secondary: string,
@@ -23,7 +21,6 @@ function getRandomService(
   return rand < percent ? secondary : primary;
 }
 
-// Фабрика миграционного прокси
 function createMigrationProxy(
   targetPrimary: string,
   targetSecondary: string = targetPrimary
@@ -49,7 +46,6 @@ function createMigrationProxy(
   };
 }
 
-// /api/health → проксируется в монолит
 app.use(
   "/api/health",
   createProxyMiddleware({
@@ -58,7 +54,6 @@ app.use(
   })
 );
 
-//health → локальный health-check самого proxy
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "ok",
@@ -70,7 +65,6 @@ app.get("/health", (req, res) => {
 app.use("/api/movies", createMigrationProxy(MONOLITH_URL, MOVIES_SERVICE_URL));
 app.use("/api/movies/health", createMigrationProxy(MOVIES_SERVICE_URL));
 
-//  маршруты которые пока работают только через монолит
 app.use("/api/users", createMigrationProxy(MONOLITH_URL));
 app.use("/api/payments", createMigrationProxy(MONOLITH_URL));
 app.use("/api/subscriptions", createMigrationProxy(MONOLITH_URL));
@@ -83,12 +77,10 @@ app.use(
   })
 );
 
-// Health-check самого прокси
 app.get("/", (req, res) => {
   res.send("Proxy Service is running");
 });
 
-// Запуск сервера
 app.listen(Number(PORT), "0.0.0.0", () => {
   console.log(`Proxy service is running on port ${PORT}`);
 });
