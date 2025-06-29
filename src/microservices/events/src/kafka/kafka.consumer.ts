@@ -5,7 +5,7 @@ import { Consumer, ConsumerSubscribeTopics, Kafka } from 'kafkajs';
 export class KafkaConsumer implements OnApplicationShutdown {
   private readonly logger = new Logger(KafkaConsumer.name);
   kafka = new Kafka({
-    brokers: process.env.KAFKA_BROKERS!.split(',').map((b) => b.trim()),
+    brokers: 'kafka:9092',
   });
 
   private readonly consumers: Consumer[] = [];
