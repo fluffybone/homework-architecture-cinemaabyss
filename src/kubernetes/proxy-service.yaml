@@ -53,8 +53,11 @@ spec:
             httpGet:
               path: /health
               port: 8000
-            initialDelaySeconds: 15
-            periodSeconds: 20
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            failureThreshold: 5
+            successThreshold: 1
+            timeoutSeconds: 5
       restartPolicy: Always
       imagePullSecrets:
         - name: dockerconfigjson
