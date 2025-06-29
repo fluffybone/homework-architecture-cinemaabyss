@@ -11,7 +11,7 @@ interface KafkaResponse {
 @Injectable()
 export class KafkaProducer implements OnModuleInit, OnApplicationShutdown {
   private readonly kafka = new Kafka({
-    brokers: 'kafka:9092',
+    brokers: ['kafka:9092'],
   });
 
   private producer: Producer = this.kafka.producer();
