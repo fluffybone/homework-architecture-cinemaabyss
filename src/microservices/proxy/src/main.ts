@@ -4,12 +4,14 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-const MONOLITH_URL = process.env.MONOLITH_URL!;
-const MOVIES_SERVICE_URL = process.env.MOVIES_SERVICE_URL!;
-const EVENTS_SERVICE_URL = process.env.EVENTS_SERVICE_URL!;
-const GRADUAL_MIGRATION = process.env.GRADUAL_MIGRATION === "true";
+const MONOLITH_URL = process.env.MONOLITH_URL || "http://monolith:8080";
+const MOVIES_SERVICE_URL =
+  process.env.MOVIES_SERVICE_URL! || "http://movies-service:8081";
+const EVENTS_SERVICE_URL =
+  process.env.EVENTS_SERVICE_URL! || "http://events-service:8082";
+const GRADUAL_MIGRATION = process.env.GRADUAL_MIGRATION === "true" || true;
 const MOVIES_MIGRATION_PERCENT = parseInt(
-  process.env.MOVIES_MIGRATION_PERCENT || "0"
+  process.env.MOVIES_MIGRATION_PERCENT || "50"
 );
 
 function getRandomService(
