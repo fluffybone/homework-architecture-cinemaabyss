@@ -53,8 +53,9 @@ jobs:
       - name: Build and push Monolith Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./src/monolith
+          platforms: linux/amd64,linux/arm64
           push: true
+          context: ./src/monolith
           tags: ${{ steps.meta-monolith.outputs.tags }}
           labels: ${{ steps.meta-monolith.outputs.labels }}
           cache-from: type=gha
@@ -75,8 +76,9 @@ jobs:
       - name: Build and push Movies Service Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./src/microservices/movies
+          platforms: linux/amd64,linux/arm64
           push: true
+          context: ./src/microservices/movies
           tags: ${{ steps.meta-movies.outputs.tags }}
           labels: ${{ steps.meta-movies.outputs.labels }}
           cache-from: type=gha
@@ -97,8 +99,9 @@ jobs:
       - name: Build and push Events Service Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./src/microservices/events
+          platforms: linux/amd64,linux/arm64
           push: true
+          context: ./src/microservices/events
           tags: ${{ steps.meta-events.outputs.tags }}
           labels: ${{ steps.meta-events.outputs.labels }}
           cache-from: type=gha
@@ -119,8 +122,9 @@ jobs:
       - name: Build and push Proxy Service Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./src/microservices/proxy
+          platforms: linux/amd64,linux/arm64
           push: true
+          context: ./src/microservices/proxy
           tags: ${{ steps.meta-proxy.outputs.tags }}
           labels: ${{ steps.meta-proxy.outputs.labels }}
           cache-from: type=gha

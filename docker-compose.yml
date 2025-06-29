@@ -47,6 +47,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - cinemaabyss-network
+    healthcheck:
+      test:
+        ["CMD-SHELL", "nc -z -w 2 kafka 9092 && echo 'Kafka is up' || exit 1"]
 
   # Monolith Service
   monolith:

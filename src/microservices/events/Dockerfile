@@ -1,6 +1,6 @@
 FROM node:24-alpine AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/events
 
 COPY package*.json ./
 RUN npm install
