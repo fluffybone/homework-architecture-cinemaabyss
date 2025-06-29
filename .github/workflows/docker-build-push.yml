@@ -3,10 +3,10 @@ name: Docker Build and Push
 on:
   workflow_dispatch:
   push:
-    branches: [ main, cinema]
+    branches: [main, cinema]
     paths:
-      - 'src/**'
-      - '.github/workflows/docker-build-push.yml'
+      - "src/**"
+      - ".github/workflows/docker-build-push.yml"
   release:
     types: [published]
 
@@ -53,7 +53,6 @@ jobs:
       - name: Build and push Monolith Docker image
         uses: docker/build-push-action@v4
         with:
-          platforms: linux/amd64,linux/arm64
           push: true
           context: ./src/monolith
           tags: ${{ steps.meta-monolith.outputs.tags }}
@@ -76,7 +75,6 @@ jobs:
       - name: Build and push Movies Service Docker image
         uses: docker/build-push-action@v4
         with:
-          platforms: linux/amd64,linux/arm64
           push: true
           context: ./src/microservices/movies
           tags: ${{ steps.meta-movies.outputs.tags }}
@@ -99,7 +97,6 @@ jobs:
       - name: Build and push Events Service Docker image
         uses: docker/build-push-action@v4
         with:
-          platforms: linux/amd64,linux/arm64
           push: true
           context: ./src/microservices/events
           tags: ${{ steps.meta-events.outputs.tags }}
@@ -122,12 +119,9 @@ jobs:
       - name: Build and push Proxy Service Docker image
         uses: docker/build-push-action@v4
         with:
-          platforms: linux/amd64,linux/arm64
           push: true
           context: ./src/microservices/proxy
           tags: ${{ steps.meta-proxy.outputs.tags }}
           labels: ${{ steps.meta-proxy.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max                    
-
-      
+          cache-to: type=gha,mode=max
