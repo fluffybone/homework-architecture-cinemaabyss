@@ -271,6 +271,15 @@ kubectl -n cinemaabyss get pod
 ```
 
 8. Добавим ingress
+   для винды докер десктоп использовала -
+   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
+   проверка статуса -kubectl get pods -n ingress-nginx
+   ок если так:
+   PS D:\project\homework-architecture-cinemaabyss> kubectl get pods -n ingress-nginx
+   NAME READY STATUS RESTARTS AGE
+   ingress-nginx-admission-create-s5ntb 0/1 Completed 0 4m55s
+   ingress-nginx-admission-patch-qdkvh 0/1 Completed 0 4m55s
+   ingress-nginx-controller-66cb9865b5-h65hq 1/1 Running 0 4m55s
 
 - добавьте аддон
 
@@ -283,9 +292,12 @@ kubectl apply -f src/kubernetes/ingress.yaml
 ```
 
 9. Добавьте в /etc/hosts
+   //На Windows файла /etc/hosts нет , есть аналог:
+   👉 C:\Windows\System32\drivers\etc\hosts
    127.0.0.1 cinemaabyss.example.com
 
 10. Вызовите
+    //видимо ненадо
 
 ```bash
 minikube tunnel
@@ -307,6 +319,9 @@ minikube tunnel
 #### Шаг 3
 
 Добавьте сюда скриншота вывода при вызове https://cinemaabyss.example.com/api/movies и скриншот вывода event-service после вызова тестов.
+
+- screenshotsKubernetes\getMovieKuber.png
+- screenshotsKubernetes\eventsServiceLogs.png
 
 # Задание 4
 
@@ -387,6 +402,10 @@ minikube tunnel
 Потом вызовите
 https://cinemaabyss.example.com/api/movies
 и приложите скриншот развертывания helm и вывода https://cinemaabyss.example.com/api/movies
+
+- screenshotsKubernetes\helmCreated.png
+- screenshotsKubernetes\helmPod.png
+- screenshotsKubernetes/getMovieHelm.png
 
 ## Удаляем все
 
