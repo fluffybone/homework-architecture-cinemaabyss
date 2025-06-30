@@ -1,0 +1,62 @@
+@startuml container_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+title Диаграмма контейнеров — Кинобездна
+
+ !$COLOR_USER = "#1ab1e6 "
+ AddContainerTag("db", $sprite="database_server", $legendText="database container")
+ AddContainerTag("webApp", $sprite="application_server", $legendText="web app container")
+ AddContainerTag("gateway", $bgColor="#5bc0de", $fontColor="black", $legendText="API Gateway")
+ AddContainerTag("broker", $bgColor="#B784A7", $fontColor="white", $legendText="Брокер сообщений")
+ 
+  UpdateElementStyle("external_person", $bgColor=$COLOR_USER)
+ 
+  Person_Ext(user, "Пользователь", "Смотрит фильмы, сохраняет в избранное")
+  Person(user_admin, "Админы", "Использует систему, управляет настрйоками")
+  
+ 
+
+  System_Boundary(our_system, "Кинобездна" ) {
+
+    Container(proxy, "Proxy Service (API Gateway)", "Единая точка входа для  сервисов, обработка и перенаправление запросов между сервисами,балансер", $tags="gateway")
+  
+   Container(user_control, "Управление пользователями" ,$descr="управляет профилями пользователей.")
+   Container(movie_service, "Сервис Фильмов" ,$descr="Метаданные фильмов, рейтинги, жанры")
+   Container(payment_service, "Сервис Обработки платежей" ,$descr="Обработка оплаты и подписок")
+
+   Container(subscribe_service, "Сервис Управления подписками" ,$descr="Все подписки, и какие доступны пользователю")
+
+ 
+  ContainerDb(movies_db, "Фильмы", "База данных", "Хранение информации о фильмах")
+  ContainerDb(users_db, "Пользователи", "База данных", "Хранение пользовательских данных")
+  ContainerDb(payments_db, "Платежи", "База данных", "Данные о платежах и подписках")
+  ContainerDb(subscribe_db, "Платежи", "База данных", "Данные о платежах и подписках")
+   
+   Container(events_service, "Сервис событий", "Kafka", "Асинхронная коммуникация между сервисами",$tags="broker")
+  
+  
+  
+  }
+  
+ 
+
+   
+
+    Rel(proxy, movie_service, "Перенаправляет запросы", "HTTP")
+    Rel(proxy, user_control, "Перенаправляет запросы", "HTTP")
+    Rel(proxy, payment_service, "Перенаправляет запросы", "HTTP")
+    Rel(proxy, subscribe_service, "Перенаправляет запросы", "HTTP")
+    Rel(user_admin, proxy, "Доступен функционал для админов" )
+    Rel(user, proxy, "Взаимодейтсвие со всем функционалом,просмотр фильмов, управление подписками..." )
+    
+    Rel(movie_service, movies_db, "Чтение запись")
+    Rel(user_control, users_db, "Чтение запись")
+    Rel(payment_service, payments_db, "Чтение запись")
+    Rel(subscribe_service, subscribe_db, "Чтение запись")
+  
+
+    Rel_U(events_service, movie_service, "Отправка / Получение событий", "Kafka")
+    Rel_U(events_service, user_control, "Отправка / Получение событий", "Kafka")
+    Rel_U(events_service, payment_service, "Отправка / Получение событий", "Kafka")
+    Rel_U(events_service, subscribe_service, "Отправка / Получение событий", "Kafka")
+  
+@enduml
